@@ -54,6 +54,8 @@ def main():
         with open(args.dev_path) as f:
             dev_json = json.load(f)
             for i, el in enumerate(tqdm.tqdm(dev_json)):
+                """if i < 5:
+                    continue"""
                 print(el)
                 instance = predictor._dataset_reader.text_to_instance(
                     utterance=el["question"], db_id=el["db_id"]
@@ -62,16 +64,24 @@ def main():
                 inst = predictor._dataset_reader.create_instance(el)
                 print(inst)
                 print(64*'-')
-                print(inst['tree_obj'].metadata)
+                from anytree.dotexport import RenderTreeGraph
+                RenderTreeGraph(inst['tree_obj'].metadata).to_picture(f'tree_{i}.png')
+                print(inst['tree_obj'].metadata, type(inst['tree_obj'].metadata))
                 print(64*'-')
                 # http://docs.allennlp.org/v0.9.0/api/allennlp.data.fields.html#allennlp.data.fields.field.Field.as_tensor
-                print(inst['leaf_hash'].as_tensor(inst['leaf_hash'].get_padding_lengths()))
+                print('leaf_hash', inst['leaf_hash'].as_tensor(inst['leaf_hash'].get_padding_lengths()))
                 print(64*'-')
-                print(inst['leaf_types'].as_tensor(inst['leaf_types'].get_padding_lengths()))
+                print('leaf_types', inst['leaf_types'].as_tensor(inst['leaf_types'].get_padding_lengths()))
                 print(64*'-')
-                print(inst['is_gold_leaf'].as_tensor(inst['is_gold_leaf'].get_padding_lengths()))
+                print('is_gold_leaf', inst['is_gold_leaf'].as_tensor(inst['is_gold_leaf'].get_padding_lengths()))
                 print(64*'-')
-                print(inst['gold_sql'].metadata)
+                print('gold_sql', inst['gold_sql'].metadata)
+                print(64*'-')
+                print('entities', inst['entities'].metadata)
+                print(64*'-')
+                print('orig_entities', inst['orig_entities'].metadata)
+                print(64*'-')
+                print('relation', inst['relation'].as_tensor(inst['relation'].get_padding_lengths()))
                 print('--------------------End of exploration--------------------')
                 exit(0)
                 # There is a bug that if we run with batch_size=1, the predictions are different.

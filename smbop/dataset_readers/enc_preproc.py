@@ -204,7 +204,9 @@ class EncPreproc:
     ):
         sc_link = desc.get("sc_link", {"q_col_match": {}, "q_tab_match": {}})
         cv_link = desc.get("cv_link", {"num_date_match": {}, "cell_match": {}})
-
+        print('sc_link', sc_link)
+        print('cv_link', cv_link)
+        print(self.relation_ids)
         # Catalogue which things are where
         loc_types = {}
         for i in range(q_enc_length):
@@ -458,6 +460,8 @@ class EncPreproc:
                             if f"{q_id},{tab_id}" not in q_tab_match:
                                 q_tab_match[f"{q_id},{tab_id}"] = "TPM"
             n -= 1
+        print('q_col_match', q_col_match)
+        print('q_tab_match', q_tab_match)
         return {"q_col_match": q_col_match, "q_tab_match": q_tab_match}
 
     @classmethod
@@ -653,6 +657,7 @@ class EncPreproc:
                             cell_match[f"{q_id},{col_id}"] = CELL_MATCH_FLAG
 
         cv_link = {"num_date_match": num_date_match, "cell_match": cell_match}
+        print('cv_link', cv_link)
         return cv_link
 
     @classmethod
