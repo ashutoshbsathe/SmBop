@@ -21,7 +21,7 @@ from allennlp.data import DatasetReader, Instance
 import tqdm
 from allennlp.predictors import Predictor
 import json
-
+import pickle 
 
 def main():
     parser = argparse.ArgumentParser()
@@ -49,36 +49,24 @@ def main():
         args.archive_path, cuda_device=args.gpu, overrides=overrides
     )
     print("after pred")
-
+    with open('./raw_data.pkl', 'wb') as f:
+        pickle.dump([], f)
+    idx = 100
     with open(args.output, "w") as g:
         with open(args.dev_path) as f:
             dev_json = json.load(f)
-            for i, el in enumerate(tqdm.tqdm(dev_json)):
-                instance = predictor._dataset_reader.text_to_instance(
-                    utterance=el["question"], db_id=el["db_id"]
-                )
-                print('--------------------Not related to SmBop, just exploring--------------------')
-                inst = predictor._dataset_reader.create_instance(el)
-                print(inst)
-                print(64*'-')
-                from anytree.dotexport import RenderTreeGraph
-                RenderTreeGraph(inst['tree_obj'].metadata).to_picture(f'tree_{i}.png')
-                print(inst['tree_obj'].metadata, type(inst['tree_obj'].metadata))
-                print(64*'-')
-                # http://docs.allennlp.org/v0.9.0/api/allennlp.data.fields.html#allennlp.data.fields.field.Field.as_tensor
-                print('leaf_hash', inst['leaf_hash'].as_tensor(inst['leaf_hash'].get_padding_lengths()))
-                print(64*'-')
-                print('leaf_types', inst['leaf_types'].as_tensor(inst['leaf_types'].get_padding_lengths()))
-                print(64*'-')
-                print('is_gold_leaf', inst['is_gold_leaf'].as_tensor(inst['is_gold_leaf'].get_padding_lengths()))
-                print(64*'-')
-                print('gold_sql', inst['gold_sql'].metadata)
-                print(64*'-')
-                print('entities', inst['entities'].metadata)
-                print(64*'-')
-                print('orig_entities', inst['orig_entities'].metadata)
-                print(64*'-')
-                print('relation', inst['relation'].as_tensor(inst['relation'].get_padding_lengths()))
+            for i, el in enumerate(tqdm.tqdm(dev_json[:idx])):
+                instance = predictor._dataset_reader.create_instance(el)
+                with open('./raw_data.pkl', 'rb') as r:
+                    data = pickle.load(r)
+                data.append({
+                    'instance': instance,
+                    'schema': [],
+                    'utterance': []
+                })
+                with open('./raw_data.pkl', 'wb') as r:
+                    pickle.dump(data, r)
+                idx += 1
                 # There is a bug that if we run with batch_size=1, the predictions are different.
                 if i == 0:
                     instance_0 = instance
@@ -92,9 +80,6 @@ def main():
 
                 else:
                     pred = "NO PREDICTION"
-                print(pred)
-                print('--------------------End of exploration--------------------')
-                exit(0)
                 g.write(f"{pred}\t{el['db_id']}\n")
 
 

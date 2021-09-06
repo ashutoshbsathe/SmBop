@@ -7,6 +7,7 @@ from collections import OrderedDict
 from copy import deepcopy
 from functools import partial
 from typing import Dict
+import pickle 
 
 import allennlp
 import torch
@@ -441,6 +442,13 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
             embedded_utterance,
             utterance_mask,
         ) = self._encode_utt_schema(enc, offsets, relation, lengths)
+        # Laggy asf but we need to do it only once so worth it !
+        with open('./raw_data.pkl', 'rb') as r:
+            data = pickle.load(r)
+        data[-1]['schema'].append(embedded_schema)
+        data[-1]['utterance'].append(embedded_utterance)
+        with open('./raw_data.pkl', 'wb') as r:
+            pickle.dump(data, r)
         batch_size, utterance_length, _ = embedded_utterance.shape
         start = time.time()
         loss = torch.tensor([0], dtype=torch.float32, device=self._device)
