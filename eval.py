@@ -58,7 +58,8 @@ def main():
                     utterance=el["question"], db_id=el["db_id"]
                 )
                 print('--------------------Not related to SmBop, just exploring--------------------')
-                inst = predictor._dataset_reader.create_instance(el)
+                # inst = predictor._dataset_reader.create_instance(el)
+                inst = instance
                 print(inst)
                 print(64*'-')
                 from anytree.dotexport import RenderTreeGraph

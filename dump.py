@@ -57,6 +57,8 @@ def main():
             dev_json = json.load(f)
             for i, el in enumerate(tqdm.tqdm(dev_json[:idx])):
                 instance = predictor._dataset_reader.create_instance(el)
+                print(instance)
+                exit(0)
                 with open('./raw_data.pkl', 'rb') as r:
                     data = pickle.load(r)
                 data.append({

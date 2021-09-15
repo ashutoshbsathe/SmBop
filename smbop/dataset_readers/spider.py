@@ -326,12 +326,13 @@ class SmbopSpiderDatasetReader(DatasetReader):
 
         schema_size = len(entities)
         schema_tokens_pre = added_values + ["*"] + schema_tokens_pre
-
+        print(schema_tokens_pre)
         schema_tokens = [
             [y for y in x if y.text not in ["_"]]
             for x in [self._tokenizer.tokenize(x)[1:-1] for x in schema_tokens_pre]
         ]
-
+        print(schema_tokens)
+        print(self._tokenizer)
         entities_as_leafs = [x.split(":")[0] for x in entities[len(added_values) + 1 :]]
         entities_as_leafs = added_values + ["*"] + entities_as_leafs
         orig_entities = [self.replacer.post(x, db_id) for x in entities_as_leafs]
