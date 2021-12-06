@@ -677,12 +677,17 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
 
     eval_err_num = 0
     for i, (p, g) in enumerate(zip(plist, glist)):
+        print(i, p, g)
         p_str = p[0]
         g_str, db = g
         db_name = db
         db = os.path.join(db_dir, db, db + ".sqlite")
         schema = Schema(get_schema(db))
-        g_sql = get_sql(schema, g_str)
+        try:
+            g_sql = get_sql(schema, g_str)
+        except:
+            entries.append({})
+            continue
         hardness = evaluator.eval_hardness(g_sql)
         scores[hardness]["count"] += 1
         scores["all"]["count"] += 1
@@ -717,6 +722,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
 
         if etype in ["all", "exec"]:
             exec_score = eval_exec_match(db, p_str, g_str, p_sql, g_sql)
+            print('Exec score = ', exec_score)
             if exec_score:
                 scores[hardness]["exec"] += 1.0
                 scores["all"]["exec"] += 1.0
@@ -730,6 +736,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
         if etype in ["all", "match"]:
             exact_score = evaluator.eval_exact_match(p_sql, g_sql)
             partial_scores = evaluator.partial_scores
+            print('Exact score = ', exact_score)
             if exact_score == 0:
                 print("{} pred: {}".format(hardness, p_str))
                 print("{} gold: {}".format(hardness, g_str))
@@ -810,6 +817,9 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
                             + scores[level]["partial"][type_]["acc"]
                         )
                     )
+    
+    with open('entries_list.json', 'w') as f:
+        json.dump(entries, f, indent=4, sort_keys=True)
 
     print_scores(scores, etype)
 
@@ -830,6 +840,7 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     cursor.execute(g_str)
     q_res = cursor.fetchall()
 
+
     def res_map(res, val_units):
         rmap = {}
         for idx, val_unit in enumerate(val_units):
@@ -843,6 +854,7 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
 
     p_val_units = [unit[1] for unit in pred["select"][1]]
     q_val_units = [unit[1] for unit in gold["select"][1]]
+
     return res_map(p_res, p_val_units) == res_map(q_res, q_val_units)
 
 

@@ -52,7 +52,7 @@ local scheduler = {
 local large_setting = {
   batch_size :: misc_params.batch_size,
   rat_layers :: misc_params.rat_layers,
-  grad_acum ::  misc_params.grad_acum,
+  grad_acum ::  1, //misc_params.grad_acum,
   model_name :: "Salesforce/grappa_large_jnt",
   // model_name :: "google/bigbird-roberta-large",
   
@@ -92,6 +92,7 @@ local max_steps = misc_params.max_steps;
 local examples = 7000;
 
 local setting = large_setting + if misc_params.train_as_dev then trainset_config else devset_config;
+
 
 
 local should_rerank = misc_params.should_rerank;
@@ -138,8 +139,8 @@ local dataset_reader_name = "smbop";
     "value_pred":misc_params.value_pred,
     "use_longdb":misc_params.use_longdb,
   },
-  "train_data_path": dataset_path + "train_spider.json",
-  "validation_data_path": dataset_path + setting.data_suffix,
+  "train_data_path": "/home/ashutosh/HDD/IITB/Sem_1/MS_RnD/ms_rnd1/generate_templated/only_30.json",
+  "validation_data_path": "/home/ashutosh/HDD/IITB/Sem_1/MS_RnD/ms_rnd1/generate_templated/finetune_dev.json",
 
   "model": {
     "experiment_name": std.extVar('experiment_name'),
@@ -214,17 +215,19 @@ local dataset_reader_name = "smbop";
     "shuffle": true,
   },
   "trainer": {
+    "type": "finetuner",
+    "pretrained_ckpt": "/home/ashutosh/HDD/IITB/Sem_1/MS_RnD/SmBop/orig_model/weights.th",
     "grad_norm": misc_params.grad_norm,
     "grad_clipping": misc_params.grad_clip,
     
     "use_amp":misc_params.amp,
-    "num_epochs": std.floor((max_steps*setting.batch_size*setting.grad_acum)/examples),
+    "num_epochs": 5,
     "cuda_device": std.parseInt(std.extVar('gpu')),
     "patience": 100,
     "validation_metric":  "+spider",
 
 
-  "num_gradient_accumulation_steps" : setting.grad_acum,
+  "num_gradient_accumulation_steps" : 1,
   "checkpointer": {"keep_most_recent_by_count": 1},
     "optimizer": {
               "type": std.extVar("optimizer") ,

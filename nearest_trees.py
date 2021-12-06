@@ -1,50 +1,68 @@
-import json
-import argparse
-import contextlib
-import sh
-import subprocess
 import pathlib
-from allennlp.commands.train import train_model
+import gdown
+import argparse
+import torch
+import smbop
+from allennlp.models.archival import Archive, load_archive, archive_model
+from allennlp.data.vocabulary import Vocabulary
+from smbop.modules.relation_transformer import *
 from allennlp.common import Params
-from smbop.dataset_readers.spider import SmbopSpiderDatasetReader
-#from smbop.dataset_readers.spider_cbr import SmbopSpiderCBRDatasetReader
-
-#from smbop.dataset_readers.spider_pretrain import SpiderPretrainDatasetReader
-#from smbop.models.smbop_pretrain import PretrainedSmbopParser
-#from smbop.data_loaders.spider_pretrain import SpiderPretrainDataLoader
-
-#from smbop.dataset_readers.cbr_with_same_schema import CBRSameSchemaDatasetReader
-#from smbop.dataset_readers.cbr_with_mixed_schema import CBRMixedSchemaDatasetReader
-#from smbop.dataset_readers.pickle_reader import PickleReader
-#from smbop.dataset_readers.spider_with_eos import SpiderWithEOS
-
-#from smbop.data_loaders.cbr_with_same_schema import CBRSameSchemaDataLoader
-#from smbop.data_loaders.cbr_with_mixed_schema import CBRMixedSchemaDataLoader
-
 from smbop.models.smbop import SmbopParser
-#from smbop.models.cbr_smbop import CBRSmbopParser
-#from smbop.models.cbr_smbop_w_leafs import CBRSmbopParserWLeafs
-#from smbop.models.cbr_with_same_schema import CBRSameSchemaParser
-#from smbop.models.cbr_same_schema_leafs import CBRSameSchemaLeafs
-#from smbop.models.smbop_NL_enr_schema_aft_rat import EnrSchemaSmbopParser
-#from smbop.models.enr_schema_plus_cbr import EnrSchemaPlusCBR
-#from smbop.models.smbop_self_tok_NL_enr_aft_rat import EnrSchemaSmbopParserMasked
-#from smbop.models.smbop_better_losses import SmbopBetterLosses
-#from smbop.models.smbop_contrastive import SmbopContrastive
-#from smbop.models.cbr_improved import CBRImproved
-#from smbop.models.cbr_smbop_op_norm import CBRSmbopOpNorm
-#from smbop.models.cbr_smbop_all_level import CBRSmbopAllLevel
-#from smbop.models.cbr_smbop_softmax import CBRSmbopSoftmax
-#from smbop.models.cbr_smbop_gating import CBRSmbopGating
-#from smbop.models.smbop_with_eos import SmbopWithEOS
-#from smbop.models.recursive_smbop import RecursiveSmbopParser
-#from smbop.models.smbop_with_eos_and_new_losses import SmbopWithEOSAndNewLosses
-
-from smbop.modules.relation_transformer import RelationTransformer
 from smbop.modules.lxmert import LxmertCrossAttentionLayer
-from smbop.training.finetuner import FineTuner
+from smbop.dataset_readers.spider import SmbopSpiderDatasetReader
+import itertools
+import smbop.utils.node_util as node_util
+import numpy as np
+from allennlp.models import Model
+from allennlp.common.params import *
+from allennlp.data import DatasetReader, Instance
+import tqdm
+from allennlp.predictors import Predictor
+import json
+import importlib
+from apted import APTED, Config
+# from zss import simple_distance, Node
+from binarytree import tree
+from time import time
+from tqdm import tqdm
+import anytree
 import namegenerator
+import pickle
+from multiprocessing import Pool
 
+import signal
+import pdb
+
+
+
+compset=set()
+class CustomConfig(Config):
+    def __init__(self):
+        super().__init__()
+        # all_names={'union', 'Orderby_desc', 'gt', 'lte', 'Table', 'Project', 'Selection', 'eq', 'sum', 'Subquery', 'Or', 'keep', 'Val_list', 'distinct', 'like', 'in', 'Value', 'lt', 'literal', 'intersect', 'Limit', 'except', 'neq', 'And', 'gte', 'max', 'Groupby', 'avg', 'count', 'min', 'nin', 'Orderby_asc', 'Product'}
+
+        self.agg_grp=['max','min','avg','count','sum']
+        self.order_grp=['Orderby_desc','Orderby_asc']
+        self.boolean_grp=['Or','And']
+        self.set_grp=['union','intersect','except']
+        self.leaf_grp=['Val_list','Value','literal','Table']
+        self.sim_grp=['like','in','nin']
+        self.comp_grp=['gt','lte','eq','lt','gte','neq']
+
+    def rename(self, node1, node2):
+        
+        if (node1.name in self.agg_grp and node2.name in self.agg_grp) or \
+        (node1.name in self.order_grp and node2.name in self.order_grp) or \
+        (node1.name in self.boolean_grp and node2.name in self.boolean_grp) or \
+        (node1.name in self.set_grp and node2.name in self.set_grp) or \
+        (node1.name in self.leaf_grp and node2.name in self.leaf_grp) or \
+        (node1.name in self.sim_grp and node2.name in self.sim_grp) or \
+        (node1.name in self.comp_grp and node2.name in self.comp_grp):
+            return 1 if node1.name != node2.name else 0
+        else:
+            return 2 if node1.name != node2.name else 0
+    def children(self, node):
+        return [x for x in node.children]
 
 def to_string(value):
     if isinstance(value, list):
@@ -54,8 +72,17 @@ def to_string(value):
     else:
         return str(value)
 
+def dist(x,y):
+    '''  x and y are instance objects whose distance we need'''
+    ccobj=CustomConfig()
+    apted = APTED(x['tree_obj'].metadata, y['tree_obj'].metadata,ccobj)
+    return (apted.compute_edit_distance())
+
+
+
 
 def run():
+    importlib.reload(smbop)
     parser = argparse.ArgumentParser(allow_abbrev=True)
     parser.add_argument("--name", nargs="?")
     parser.add_argument("--force", action="store_true",
@@ -111,7 +138,6 @@ def run():
     parser.add_argument("--temperature", default=1.0, type=float)
     parser.add_argument("--grad_clip", default=-1, type=float)
     parser.add_argument("--grad_norm", default=-1, type=float)
-    parser.add_argument("--config_path", default="configs/defaults.jsonnet", type=str)
 
     default_dict = {k.option_strings[0][2:]: k.default for k in parser._actions}
     args = parser.parse_args()
@@ -119,7 +145,7 @@ def run():
         [
             f"{key}{value}"
             for key, value in vars(args).items()
-            if (key not in ["name", "config_path"] and value != default_dict[key])
+            if (key != "name" and value != default_dict[key])
         ]
     ) #vars which differ from default
 
@@ -131,7 +157,8 @@ def run():
         else:
             ext_vars[key] = to_string(value)
     print(ext_vars) #just a toggle of disabled variables
-    config_path = args.config_path
+    #default_config_file = "configs/trial_extract.jsonnet"
+    default_config_file = "configs/train_extract.jsonnet"
 
     overrides_dict = {}
 
@@ -150,43 +177,18 @@ def run():
     ext_vars["experiment_name"] = experiment_name
     overrides_json = json.dumps(overrides_dict)
     settings = Params.from_file(
-        config_path,
-        ext_vars=ext_vars,
-        params_overrides=overrides_json,
+        default_config_file,
+        # ext_vars=ext_vars,
+        # params_overrides=overrides_json,
     )
-
-    dbr = SmbopSpiderDatasetReader.from_params(settings)
-    print(dbr)
-    exit(0)
-    prefix = ""
-    # prefix = "/home/ohadr/"
-    prefix = "./media"
-
-
-    assert not pathlib.Path(f"{prefix}experiments/{experiment_name}").exists()
-
-#     sh.ln("-s", f"{prefix}/experiments/{experiment_name}", f"experiments/{experiment_name}")
-    pathlib.Path(f"backup").mkdir(exist_ok=True)
-    pathlib.Path(f"cache").mkdir(exist_ok=True)
-    # pathlib.Path(f"experiments/{experiment_name}").mkdir(exist_ok=True)
-
-    subprocess.check_call(
-        f"git ls-files | tar Tzcf - backup/{experiment_name}.tgz", shell=True
-    )
-
-    if args.profile:
-        pass
-    else:
-        cntx = contextlib.nullcontext()
-
-    with cntx:
-        train_model(
-            params=settings,
-            serialization_dir=f"{prefix}experiments/{experiment_name}",
-            recover=args.recover,
-            force=True,
-        )
+    dbr=SmbopSpiderDatasetReader.from_params(settings)
+    tlist=[]
+    # ques=[]
+    for inst in (dbr._read_examples_file("dataset/train_spider.json")):
+        tlist.append(inst)
+    print(len(tlist))
+    print(dist(x,y))
 
 
-if __name__ == "__main__":
+if __name__=='__main__':
     run()

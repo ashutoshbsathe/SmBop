@@ -53,12 +53,13 @@ local large_setting = {
   batch_size :: misc_params.batch_size,
   rat_layers :: misc_params.rat_layers,
   grad_acum ::  misc_params.grad_acum,
-  model_name :: "Salesforce/grappa_large_jnt",
+  model_name :: "/mnt/infonas/data/awasthi/semantic_parsing/roberta-base",
+  // model_name :: "Salesforce/grappa_large_jnt",
   // model_name :: "google/bigbird-roberta-large",
   
   pretrained_embedding_dim :: 1024,
   // cache_path ::  if misc_params.value_pred then "cache/exp700" else "cache/exp304_no_values", 
-  cache_path ::  if misc_params.value_pred then "cache/exp2001" else "cache/exp304_no_values", 
+  cache_path ::  "preserved_cache/grappa_spider_only/stuffy-lime-harrier_", 
   
 
 };
@@ -92,6 +93,7 @@ local max_steps = misc_params.max_steps;
 local examples = 7000;
 
 local setting = large_setting + if misc_params.train_as_dev then trainset_config else devset_config;
+
 
 
 local should_rerank = misc_params.should_rerank;
@@ -214,6 +216,8 @@ local dataset_reader_name = "smbop";
     "shuffle": true,
   },
   "trainer": {
+    "type": "finetuner",
+    "pretrained_ckpt": "/mnt/infonas/data/awasthi/semantic_parsing/smbop/try_train/experiments/queasy-lime-whippet_rat_layers4_batch_size6_grad_acum3_pretrain/best.th",
     "grad_norm": misc_params.grad_norm,
     "grad_clipping": misc_params.grad_clip,
     
@@ -225,7 +229,7 @@ local dataset_reader_name = "smbop";
 
 
   "num_gradient_accumulation_steps" : setting.grad_acum,
-  "checkpointer": {"keep_most_recent_by_count": 1},
+  "checkpointer": {"num_serialized_models_to_keep": 1},
     "optimizer": {
               "type": std.extVar("optimizer") ,
               

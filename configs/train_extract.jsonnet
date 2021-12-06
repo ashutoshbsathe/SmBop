@@ -91,7 +91,8 @@ local dataset_path = "dataset/";
 local max_steps = misc_params.max_steps;
 local examples = 7000;
 
-local setting = large_setting + if misc_params.train_as_dev then trainset_config else devset_config;
+local setting = large_setting + trainset_config;
+
 
 
 local should_rerank = misc_params.should_rerank;

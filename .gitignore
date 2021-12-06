@@ -10,3 +10,12 @@
 __pycache__
 smbop.code-workspace
 .vscode
+*.sql 
+orig_model/ 
+*.zip
+*.tar.gz
+dnd_worked
+cache*
+media*
+*.pkl
+*.txt
