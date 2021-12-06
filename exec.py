@@ -155,9 +155,6 @@ def run():
         params_overrides=overrides_json,
     )
 
-    dbr = SmbopSpiderDatasetReader.from_params(settings)
-    print(dbr)
-    exit(0)
     prefix = ""
     # prefix = "/home/ohadr/"
     prefix = "./media"
