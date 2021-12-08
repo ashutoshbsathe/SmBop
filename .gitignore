@@ -19,3 +19,4 @@ cache*
 media*
 *.pkl
 *.txt
+finetuned_model/
