@@ -15,7 +15,7 @@ from smbop.dataset_readers.spider import SmbopSpiderDatasetReader
 
 #from smbop.dataset_readers.cbr_with_same_schema import CBRSameSchemaDatasetReader
 #from smbop.dataset_readers.cbr_with_mixed_schema import CBRMixedSchemaDatasetReader
-#from smbop.dataset_readers.pickle_reader import PickleReader
+from smbop.dataset_readers.pickle_reader import PickleReader
 #from smbop.dataset_readers.spider_with_eos import SpiderWithEOS
 
 #from smbop.data_loaders.cbr_with_same_schema import CBRSameSchemaDataLoader

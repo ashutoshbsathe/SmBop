@@ -907,6 +907,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                         spider_acc = int(self._evaluate_func(gold_sql, sql, db_id))
                     except:
                         print("EM evaluation failed")
+                        raise
 
                 reranker_acc_list.append(reranker_acc)
                 self._reranker_acc(reranker_acc)
