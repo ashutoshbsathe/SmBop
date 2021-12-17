@@ -9,6 +9,7 @@ from allennlp.common import Params
 from smbop.models.smbop import SmbopParser
 from smbop.modules.lxmert import LxmertCrossAttentionLayer
 from smbop.dataset_readers.spider import SmbopSpiderDatasetReader
+from smbop.dataset_readers.pickle_reader import PickleReader
 import itertools
 import smbop.utils.node_util as node_util
 import numpy as np
