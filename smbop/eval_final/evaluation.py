@@ -679,13 +679,15 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
     for i, (p, g) in enumerate(zip(plist, glist)):
         print(i, p, g)
         p_str = p[0]
-        g_str, db = g
+        #g_str, db = g
+        db = g[-1]
+        g_str = ' '.join(g[:-1])
         db_name = db
         db = os.path.join(db_dir, db, db + ".sqlite")
         schema = Schema(get_schema(db))
         try:
             g_sql = get_sql(schema, g_str)
-        except:
+        except Exception as e:
             entries.append({})
             continue
         hardness = evaluator.eval_hardness(g_sql)
