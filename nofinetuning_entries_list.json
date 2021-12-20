@@ -1,6 +1,7 @@
 [
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Region FROM country AS T1 JOIN city AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Name  =  \"Kabul\"",
         "hardness": "medium",
         "partial": {
@@ -79,6 +80,7 @@
     },
     {
         "exact": 0,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country WHERE continent  =  \"Europe\" AND Population  =  \"80000\"",
         "hardness": "medium",
         "partial": {
@@ -157,6 +159,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(*) FROM (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" INTERSECT SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"Dutch\")",
         "hardness": "easy",
         "partial": {
@@ -235,6 +238,7 @@
     },
     {
         "exact": 0,
+        "exec": true,
         "goldSQL": "select distinct t3.name from country as t1 join countrylanguage as t2 on t1.code  =  t2.countrycode join city as t3 on t1.code  =  t3.countrycode where t2.isofficial  =  't' and t2.language  =  'chinese' and t1.continent  =  \"asia\"",
         "hardness": "hard",
         "partial": {
@@ -313,6 +317,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name ,  SurfaceArea FROM country ORDER BY SurfaceArea DESC LIMIT 5",
         "hardness": "medium",
         "partial": {
@@ -391,6 +396,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" INTERSECT SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"French\"",
         "hardness": "extra",
         "partial": {
@@ -469,6 +475,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" AND T2.IsOfficial  =  \"T\" INTERSECT SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"French\" AND T2.IsOfficial  =  \"T\"",
         "hardness": "extra",
         "partial": {
@@ -547,6 +554,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode",
         "hardness": "medium",
         "partial": {
@@ -625,6 +633,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Code FROM country WHERE GovernmentForm != \"Republic\" EXCEPT SELECT CountryCode FROM countrylanguage WHERE LANGUAGE  =  \"English\"",
         "hardness": "hard",
         "partial": {
@@ -703,6 +712,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(*) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Afghanistan\" AND IsOfficial  =  \"T\"",
         "hardness": "medium",
         "partial": {
@@ -781,6 +791,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Aruba\" ORDER BY Percentage DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -859,6 +870,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT sum(SurfaceArea) FROM country WHERE Continent  =  \"Asia\" OR Continent  =  \"Europe\"",
         "hardness": "medium",
         "partial": {
@@ -937,6 +949,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT COUNT( DISTINCT Continent) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"Chinese\"",
         "hardness": "medium",
         "partial": {
@@ -1015,6 +1028,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT T1.Region FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" OR T2.Language  =  \"Dutch\"",
         "hardness": "hard",
         "partial": {
@@ -1093,6 +1107,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(*) FROM country WHERE continent  =  \"Asia\"",
         "hardness": "easy",
         "partial": {
@@ -1171,6 +1186,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District",
         "hardness": "extra",
         "partial": {
@@ -1249,6 +1265,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Population ,  LifeExpectancy FROM country WHERE Name  =  \"Brazil\"",
         "hardness": "medium",
         "partial": {
@@ -1327,6 +1344,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "select t1.name from country as t1 join countrylanguage as t2 on t1.code  =  t2.countrycode where t2.language  =  \"english\" and isofficial  =  \"t\" union select t1.name from country as t1 join countrylanguage as t2 on t1.code  =  t2.countrycode where t2.language  =  \"dutch\" and isofficial  =  \"t\"",
         "hardness": "extra",
         "partial": {
@@ -1405,6 +1423,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT sum(Population) ,  max(GNP) FROM country WHERE Continent  =  \"Asia\"",
         "hardness": "medium",
         "partial": {
@@ -1483,6 +1502,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT LANGUAGE FROM countrylanguage GROUP BY LANGUAGE ORDER BY count(*) DESC LIMIT 1",
         "hardness": "hard",
         "partial": {
@@ -1561,6 +1581,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name FROM country WHERE Continent  =  \"Africa\"  AND population  <  (SELECT max(population) FROM country WHERE Continent  =  \"Asia\")",
         "hardness": "extra",
         "partial": {
@@ -1639,6 +1660,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2",
         "hardness": "medium",
         "partial": {
@@ -1717,6 +1739,7 @@
     },
     {
         "exact": false,
+        "exec": false,
         "goldSQL": "SELECT COUNT(T2.Language) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Aruba\"",
         "hardness": "medium",
         "partial": {
@@ -1795,6 +1818,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country WHERE Continent  =  \"Asia\" ORDER BY LifeExpectancy LIMIT 1",
         "hardness": "hard",
         "partial": {
@@ -1873,6 +1897,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Continent FROM country WHERE Name  =  \"Anguilla\"",
         "hardness": "easy",
         "partial": {
@@ -1951,6 +1976,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country ORDER BY Population ASC LIMIT 3",
         "hardness": "medium",
         "partial": {
@@ -2029,6 +2055,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) ,  GovernmentForm FROM country GROUP BY GovernmentForm HAVING avg(LifeExpectancy)  >  72",
         "hardness": "medium",
         "partial": {
@@ -2107,6 +2134,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) ,  max(GNP) FROM country WHERE Continent  =  \"Asia\"",
         "hardness": "medium",
         "partial": {
@@ -2185,6 +2213,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT CountryCode ,  max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  \"Spanish\" GROUP BY CountryCode",
         "hardness": "medium",
         "partial": {
@@ -2263,6 +2292,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode",
         "hardness": "medium",
         "partial": {
@@ -2341,6 +2371,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT avg(GNP) ,  sum(population) FROM country WHERE GovernmentForm  =  \"US Territory\"",
         "hardness": "medium",
         "partial": {
@@ -2419,6 +2450,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(T2.Language) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Aruba\"",
         "hardness": "medium",
         "partial": {
@@ -2497,6 +2529,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Continent  =  \"Asia\" GROUP BY T2.Language ORDER BY COUNT (*) DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -2575,6 +2608,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1",
         "hardness": "medium",
         "partial": {
@@ -2653,6 +2687,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) ,  GovernmentForm FROM country GROUP BY GovernmentForm HAVING avg(LifeExpectancy)  >  72",
         "hardness": "medium",
         "partial": {
@@ -2731,6 +2766,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Population ,  Region FROM country WHERE Name  =  \"Angola\"",
         "hardness": "medium",
         "partial": {
@@ -2809,6 +2845,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Population ,  Region FROM country WHERE Name  =  \"Angola\"",
         "hardness": "medium",
         "partial": {
@@ -2887,6 +2924,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "select sum(population) ,  avg(surfacearea) from country where continent  =  \"north america\" and surfacearea  >  3000",
         "hardness": "hard",
         "partial": {
@@ -2965,6 +3003,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T1.Name ,  T1.Population FROM city AS T1 JOIN countrylanguage AS T2 ON T1.CountryCode  =  T2.CountryCode WHERE T2.Language  =  \"English\" ORDER BY T1.Population DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -3043,6 +3082,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT T2.Name FROM country AS T1 JOIN city AS T2 ON T2.CountryCode  =  T1.Code WHERE T1.Continent  =  'Europe' AND T1.Name NOT IN (SELECT T3.Name FROM country AS T3 JOIN countrylanguage AS T4 ON T3.Code  =  T4.CountryCode WHERE T4.IsOfficial  =  'T' AND T4.Language  =  'English')",
         "hardness": "extra",
         "partial": {
@@ -3121,6 +3161,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(SurfaceArea) FROM country WHERE Region  =  \"Caribbean\"",
         "hardness": "easy",
         "partial": {
@@ -3199,6 +3240,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Code FROM country WHERE GovernmentForm != \"Republic\" EXCEPT SELECT CountryCode FROM countrylanguage WHERE LANGUAGE  =  \"English\"",
         "hardness": "hard",
         "partial": {
@@ -3277,6 +3319,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT T2.Name FROM country AS T1 JOIN city AS T2 ON T2.CountryCode  =  T1.Code WHERE T1.Continent  =  'Europe' AND T1.Name NOT IN (SELECT T3.Name FROM country AS T3 JOIN countrylanguage AS T4 ON T3.Code  =  T4.CountryCode WHERE T4.IsOfficial  =  'T' AND T4.Language  =  'English')",
         "hardness": "extra",
         "partial": {
@@ -3355,6 +3398,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT T1.Continent FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Continent ORDER BY COUNT(*) DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -3433,6 +3477,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(DISTINCT LANGUAGE) FROM countrylanguage",
         "hardness": "easy",
         "partial": {
@@ -3511,6 +3556,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1",
         "hardness": "medium",
         "partial": {
@@ -3589,6 +3635,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT avg(LifeExpectancy) FROM country WHERE Name NOT IN (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" AND T2.IsOfficial  =  \"T\")",
         "hardness": "extra",
         "partial": {
@@ -3667,6 +3714,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country WHERE IndepYear  >  1950",
         "hardness": "easy",
         "partial": {
@@ -3745,6 +3793,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT name FROM city WHERE Population BETWEEN 160000 AND 900000",
         "hardness": "easy",
         "partial": {
@@ -3823,6 +3872,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Aruba\" ORDER BY Percentage DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -3901,6 +3951,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country WHERE IndepYear  >  1950",
         "hardness": "easy",
         "partial": {
@@ -3979,6 +4030,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(*) ,  District FROM city WHERE Population  >  (SELECT avg(Population) FROM city) GROUP BY District",
         "hardness": "extra",
         "partial": {
@@ -4057,6 +4109,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Continent FROM country WHERE Name  =  \"Anguilla\"",
         "hardness": "easy",
         "partial": {
@@ -4135,6 +4188,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT count(*) ,   max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  \"Spanish\" GROUP BY CountryCode",
         "hardness": "extra",
         "partial": {
@@ -4213,6 +4267,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.HeadOfState  =  \"Beatrix\" AND T2.IsOfficial  =  \"T\"",
         "hardness": "medium",
         "partial": {
@@ -4291,6 +4346,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.GovernmentForm  =  \"Republic\" GROUP BY T2.Language HAVING COUNT(*)  =  1",
         "hardness": "hard",
         "partial": {
@@ -4369,6 +4425,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT CountryCode ,  max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  \"Spanish\" GROUP BY CountryCode",
         "hardness": "medium",
         "partial": {
@@ -4447,6 +4504,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name FROM country WHERE SurfaceArea  >  (SELECT min(SurfaceArea) FROM country WHERE Continent  =  \"Europe\")",
         "hardness": "hard",
         "partial": {
@@ -4525,6 +4583,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) FROM city WHERE District  =  \"Gelderland\"",
         "hardness": "easy",
         "partial": {
@@ -4603,6 +4662,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT CountryCode FROM countrylanguage WHERE LANGUAGE != \"English\"",
         "hardness": "easy",
         "partial": {
@@ -4681,6 +4741,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T1.Continent FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Continent ORDER BY COUNT(*) DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -4759,6 +4820,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Continent  =  \"Asia\" GROUP BY T2.Language ORDER BY COUNT (*) DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -4837,6 +4899,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(*) FROM country WHERE continent  =  \"Asia\"",
         "hardness": "easy",
         "partial": {
@@ -4915,6 +4978,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name ,  population ,  HeadOfState FROM country ORDER BY SurfaceArea DESC LIMIT 1",
         "hardness": "medium",
         "partial": {
@@ -4993,6 +5057,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name FROM country WHERE SurfaceArea  >  (SELECT min(SurfaceArea) FROM country WHERE Continent  =  \"Europe\")",
         "hardness": "hard",
         "partial": {
@@ -5071,6 +5136,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name ,  Population ,  LifeExpectancy FROM country WHERE Continent  =  \"Asia\" ORDER BY SurfaceArea DESC LIMIT 1",
         "hardness": "hard",
         "partial": {
@@ -5149,6 +5215,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(*) FROM (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" INTERSECT SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"Dutch\")",
         "hardness": "easy",
         "partial": {
@@ -5227,6 +5294,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name ,  SurfaceArea ,  IndepYear FROM country ORDER BY Population LIMIT 1",
         "hardness": "medium",
         "partial": {
@@ -5305,6 +5373,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Region FROM country AS T1 JOIN city AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Name  =  \"Kabul\"",
         "hardness": "medium",
         "partial": {
@@ -5383,6 +5452,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT count(*) ,   max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  \"Spanish\" GROUP BY CountryCode",
         "hardness": "extra",
         "partial": {
@@ -5461,6 +5531,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name ORDER BY COUNT(*) DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -5539,6 +5610,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name FROM country WHERE Continent  =  \"Asia\" ORDER BY LifeExpectancy LIMIT 1",
         "hardness": "hard",
         "partial": {
@@ -5617,6 +5689,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT CountryCode FROM countrylanguage EXCEPT SELECT CountryCode FROM countrylanguage WHERE LANGUAGE  =  \"English\"",
         "hardness": "hard",
         "partial": {
@@ -5695,6 +5768,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2",
         "hardness": "medium",
         "partial": {
@@ -5773,6 +5847,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT count(DISTINCT T2.Language) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE  IndepYear  <  1930 AND T2.IsOfficial  =  \"T\"",
         "hardness": "medium",
         "partial": {
@@ -5851,6 +5926,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(DISTINCT GovernmentForm) FROM country WHERE Continent  =  \"Africa\"",
         "hardness": "easy",
         "partial": {
@@ -5929,6 +6005,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT CountryCode FROM countrylanguage WHERE LANGUAGE != \"English\"",
         "hardness": "easy",
         "partial": {
@@ -6007,6 +6084,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Population ,  LifeExpectancy FROM country WHERE Name  =  \"Brazil\"",
         "hardness": "medium",
         "partial": {
@@ -6085,6 +6163,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72",
         "hardness": "medium",
         "partial": {
@@ -6163,6 +6242,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country ORDER BY Population DESC LIMIT 3",
         "hardness": "medium",
         "partial": {
@@ -6241,6 +6321,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT COUNT(*) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Afghanistan\" AND IsOfficial  =  \"T\"",
         "hardness": "medium",
         "partial": {
@@ -6319,6 +6400,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT avg(LifeExpectancy) FROM country WHERE Region  =  \"Central Africa\"",
         "hardness": "easy",
         "partial": {
@@ -6397,6 +6479,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT sum(Population) FROM country WHERE Name NOT IN (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\")",
         "hardness": "extra",
         "partial": {
@@ -6475,6 +6558,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) FROM city WHERE District  =  \"Gelderland\"",
         "hardness": "easy",
         "partial": {
@@ -6553,6 +6637,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name FROM country WHERE Continent  =  \"Asia\"  AND population  >  (SELECT max(population) FROM country WHERE Continent  =  \"Africa\")",
         "hardness": "extra",
         "partial": {
@@ -6631,6 +6716,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" INTERSECT SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"French\"",
         "hardness": "extra",
         "partial": {
@@ -6709,6 +6795,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT Name ,  Population ,  LifeExpectancy FROM country WHERE Continent  =  \"Asia\" ORDER BY SurfaceArea DESC LIMIT 1",
         "hardness": "hard",
         "partial": {
@@ -6787,6 +6874,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name ORDER BY COUNT(*) DESC LIMIT 1",
         "hardness": "extra",
         "partial": {
@@ -6865,6 +6953,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country WHERE continent  =  \"Europe\" AND Population  =  \"80000\"",
         "hardness": "medium",
         "partial": {
@@ -6943,6 +7032,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT Name FROM country ORDER BY Population DESC LIMIT 3",
         "hardness": "medium",
         "partial": {
@@ -7021,6 +7111,7 @@
     },
     {
         "exact": true,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT T1.Region FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" OR T2.Language  =  \"Dutch\"",
         "hardness": "hard",
         "partial": {
@@ -7099,6 +7190,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT avg(LifeExpectancy) FROM country WHERE Name NOT IN (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" AND T2.IsOfficial  =  \"T\")",
         "hardness": "extra",
         "partial": {
@@ -7177,6 +7269,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT sum(Population) FROM country WHERE Name NOT IN (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\")",
         "hardness": "extra",
         "partial": {
@@ -7255,6 +7348,7 @@
     },
     {
         "exact": true,
+        "exec": true,
         "goldSQL": "SELECT count(DISTINCT GovernmentForm) FROM country WHERE Continent  =  \"Africa\"",
         "hardness": "easy",
         "partial": {
@@ -7333,6 +7427,7 @@
     },
     {
         "exact": 0,
+        "exec": false,
         "goldSQL": "SELECT sum(SurfaceArea) FROM country WHERE Region  =  \"Caribbean\"",
         "hardness": "easy",
         "partial": {

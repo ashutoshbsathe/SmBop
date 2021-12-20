@@ -776,6 +776,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
                     "hardness": hardness,
                     "exact": exact_score,
                     "partial": partial_scores,
+                    "exec": exec_score,
                 }
             )
 
