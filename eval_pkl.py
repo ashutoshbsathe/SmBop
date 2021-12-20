@@ -72,7 +72,7 @@ def main():
 
                 else:
                     pred = "NO PREDICTION"
-                g.write(f"{pred}\t{instance['db_id']}\n")
+                g.write(f"{pred}\t{instance['db_id'].metadata}\n")
 
 
 if __name__ == "__main__":
