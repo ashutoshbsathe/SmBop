@@ -1116,6 +1116,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
             out["spider"] = self._spider_acc.get_metric(reset)
             out["reranker"] = self._reranker_acc.get_metric(reset)
             out["leafs_acc"] = self._leafs_acc.get_metric(reset)
+            out["spider_and_acc"] = out["spider"] * out["final_beam_acc"]
             # out['self._spider_acc._count'] = self._spider_acc._count
         return out
 
