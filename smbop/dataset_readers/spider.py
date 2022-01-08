@@ -239,6 +239,7 @@ class SmbopSpiderDatasetReader(DatasetReader):
             except Exception as e:
                 # there are two examples in the train set that are wrongly formatted, skip them
                 print(f"error with {ex['query']}")
+                raise e
                 return None
 
         ins = self.text_to_instance(
