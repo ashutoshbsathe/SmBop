@@ -23,21 +23,21 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 1,
-                "pred_total": 0,
+                "pred_total": 1,
                 "rec": 0
             },
             "group(no Having)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
-                "pred_total": 0,
-                "rec": 0
+                "pred_total": 1,
+                "rec": 1
             },
             "keywords": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 3,
-                "pred_total": 1,
+                "pred_total": 2,
                 "rec": 0
             },
             "order": {
@@ -48,11 +48,11 @@
                 "rec": 1
             },
             "select": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "select(no AGG)": {
                 "acc": 1,
@@ -76,7 +76,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( DISTINCT countrylanguage.language ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.governmentform = 'republic'"
+        "predictSQL": "SELECT countrylanguage.language FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.governmentform = 'republic' GROUP BY countrylanguage.language"
     },
     {
         "exact": true,
@@ -313,7 +313,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( * ) FROM country WHERE country.governmentform = 'republic'"
+        "predictSQL": "SELECT COUNT( * ) FROM country WHERE country.governmentform = 'republics'"
     },
     {
         "exact": true,
@@ -508,11 +508,11 @@
                 "rec": 1
             },
             "keywords": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "order": {
                 "acc": 1,
@@ -522,38 +522,38 @@
                 "rec": 1
             },
             "select": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "select(no AGG)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "where": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             },
             "where(no OP)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT country.name FROM country WHERE country.population<(SELECT MIN( country.population ) FROM country WHERE country.continent = 'Asia')"
+        "predictSQL": "country , country"
     },
     {
-        "exact": true,
+        "exact": 0,
         "exec": false,
         "goldSQL": "SELECT avg(LifeExpectancy) FROM country WHERE Continent  =  \"Africa\" AND GovernmentForm  =  \"Republic\"",
         "hardness": "medium",
@@ -566,11 +566,11 @@
                 "rec": 1
             },
             "and/or": {
-                "acc": 1,
-                "f1": 1,
-                "label_total": 1,
+                "acc": 0,
+                "f1": 0,
+                "label_total": 0,
                 "pred_total": 1,
-                "rec": 1
+                "rec": 0
             },
             "group": {
                 "acc": 1,
@@ -615,21 +615,21 @@
                 "rec": 1
             },
             "where": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 2,
-                "pred_total": 2,
-                "rec": 1
+                "pred_total": 1,
+                "rec": 0
             },
             "where(no OP)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 2,
-                "pred_total": 2,
-                "rec": 1
+                "pred_total": 1,
+                "rec": 0
             }
         },
-        "predictSQL": "SELECT AVG( country.lifeexpectancy ) FROM country WHERE country.continent = 'African' AND country.governmentform = 'republic'"
+        "predictSQL": "SELECT AVG( country.lifeexpectancy ) FROM country WHERE country.governmentform = 'republics'"
     },
     {
         "exact": true,
@@ -869,7 +869,7 @@
         "predictSQL": "SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' AND countrylanguage.isofficial = 't' INTERSECT SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'French' AND countrylanguage.isofficial = 't'"
     },
     {
-        "exact": true,
+        "exact": 0,
         "exec": false,
         "goldSQL": "SELECT count(DISTINCT T2.Language) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE  IndepYear  <  1930 AND T2.IsOfficial  =  \"T\"",
         "hardness": "medium",
@@ -917,18 +917,18 @@
                 "rec": 1
             },
             "select": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 1
+                "rec": 0
             },
             "select(no AGG)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 1
+                "rec": 0
             },
             "where": {
                 "acc": 1,
@@ -945,7 +945,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( DISTINCT countrylanguage.language ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.indepyear<1930 AND countrylanguage.isofficial = 't'"
+        "predictSQL": "SELECT COUNT( DISTINCT countrylanguage.isofficial ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.indepyear<1930 AND countrylanguage.isofficial = 't'"
     },
     {
         "exact": true,
@@ -1140,11 +1140,11 @@
                 "rec": 1
             },
             "keywords": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "order": {
                 "acc": 1,
@@ -1157,32 +1157,32 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             },
             "select(no AGG)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             },
             "where": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             },
             "where(no OP)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT MIN( country.population ) FROM country WHERE country.population > (SELECT country.population FROM country WHERE country.continent = 'Africa')"
+        "predictSQL": "country , country"
     },
     {
         "exact": true,
@@ -1264,7 +1264,7 @@
         "predictSQL": "SELECT AVG( country.lifeexpectancy ) FROM country WHERE country.region = 'Central Africa'"
     },
     {
-        "exact": true,
+        "exact": 0,
         "exec": false,
         "goldSQL": "SELECT DISTINCT T3.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode JOIN city AS T3 ON T1.Code  =  T3.CountryCode WHERE T2.IsOfficial  =  'T' AND T2.Language  =  'Chinese' AND T1.Continent  =  \"Asia\"",
         "hardness": "hard",
@@ -1326,21 +1326,21 @@
                 "rec": 1
             },
             "where": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 3,
-                "pred_total": 3,
-                "rec": 1
+                "pred_total": 2,
+                "rec": 0
             },
             "where(no OP)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 3,
-                "pred_total": 3,
-                "rec": 1
+                "pred_total": 2,
+                "rec": 0
             }
         },
-        "predictSQL": "SELECT DISTINCT city.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode JOIN city ON country.code = city.countrycode WHERE country.continent = 'Asia' AND countrylanguage.isofficial = 't' AND countrylanguage.language = 'Chinese'"
+        "predictSQL": "SELECT DISTINCT city.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode JOIN city ON country.code = city.countrycode WHERE country.continent = 'Asia' AND countrylanguage.language = 'Chinese'"
     },
     {
         "exact": true,
@@ -1738,8 +1738,8 @@
         "predictSQL": "SELECT countrylanguage.language FROM countrylanguage GROUP BY countrylanguage.language ORDER BY COUNT( * ) DESC LIMIT 1"
     },
     {
-        "exact": 0,
-        "exec": false,
+        "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) ,  avg(LifeExpectancy) ,  Continent FROM country GROUP BY Continent HAVING avg(LifeExpectancy)  <  72",
         "hardness": "medium",
         "partial": {
@@ -1786,18 +1786,18 @@
                 "rec": 1
             },
             "select": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 3,
-                "pred_total": 2,
-                "rec": 0
+                "pred_total": 3,
+                "rec": 1
             },
             "select(no AGG)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 3,
-                "pred_total": 2,
-                "rec": 0
+                "pred_total": 3,
+                "rec": 1
             },
             "where": {
                 "acc": 1,
@@ -1814,7 +1814,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT country.continent , AVG( country.lifeexpectancy ) FROM country GROUP BY country.continent HAVING AVG( country.lifeexpectancy )<72"
+        "predictSQL": "SELECT SUM( country.population ) , AVG( country.lifeexpectancy ) , country.continent FROM country GROUP BY country.continent HAVING AVG( country.lifeexpectancy )<72"
     },
     {
         "exact": true,
@@ -2170,7 +2170,7 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 0,
-                "pred_total": 2,
+                "pred_total": 1,
                 "rec": 0
             },
             "order": {
@@ -2209,7 +2209,7 @@
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT COUNT( * ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' OR countrylanguage.language = 'Dutch'"
+        "predictSQL": "SELECT COUNT( * ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' AND sqlite_sequence.seq = 'Dutch'"
     },
     {
         "exact": 0,
@@ -2604,7 +2604,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT countrylanguage.countrycode , countrylanguage.language , MAX( countrylanguage.percentage ) FROM countrylanguage GROUP BY countrylanguage.countrycode"
+        "predictSQL": "SELECT countrylanguage.language , countrylanguage.countrycode , MAX( countrylanguage.percentage ) FROM countrylanguage GROUP BY countrylanguage.countrycode"
     },
     {
         "exact": 0,
@@ -2683,10 +2683,10 @@
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT country.code FROM country WHERE countrylanguage.language = 'English' EXCEPT SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 't' AND country.governmentform = 'Republic'"
+        "predictSQL": "SELECT country.code FROM country WHERE countrylanguage.language = 'English' EXCEPT SELECT country.code FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 't' AND country.governmentform = 'Republic'"
     },
     {
-        "exact": 0,
+        "exact": true,
         "exec": false,
         "goldSQL": "SELECT COUNT(*) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Afghanistan\" AND IsOfficial  =  \"T\"",
         "hardness": "medium",
@@ -2734,18 +2734,18 @@
                 "rec": 1
             },
             "select": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "select(no AGG)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "where": {
                 "acc": 1,
@@ -2762,7 +2762,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( countrylanguage.language ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Afghanistan' AND countrylanguage.isofficial = 't'"
+        "predictSQL": "SELECT COUNT( * ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Afghanistan' AND countrylanguage.isofficial = 't'"
     },
     {
         "exact": 0,
@@ -3003,7 +3003,7 @@
     },
     {
         "exact": true,
-        "exec": true,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT T1.Region FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" OR T2.Language  =  \"Dutch\"",
         "hardness": "hard",
         "partial": {
@@ -3078,7 +3078,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT DISTINCT country.region FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' OR countrylanguage.language = 'Dutch'"
+        "predictSQL": "SELECT country.region FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' OR countrylanguage.language = 'Dutch'"
     },
     {
         "exact": true,
@@ -3394,7 +3394,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT * FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' AND countrylanguage.isofficial = 't' UNION SELECT country.capital FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Dutch' AND countrylanguage.isofficial = 't'"
+        "predictSQL": "SELECT * FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' AND countrylanguage.isofficial = 't' UNION SELECT * FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Dutch' AND countrylanguage.isofficial = 't'"
     },
     {
         "exact": 0,
@@ -3448,14 +3448,14 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 2,
+                "pred_total": 1,
                 "rec": 0
             },
             "select(no AGG)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 2,
+                "pred_total": 1,
                 "rec": 0
             },
             "where": {
@@ -3473,7 +3473,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( * ) , MAX( country.gnp ) FROM country WHERE country.continent = 'Asia'"
+        "predictSQL": "SELECT MAX( country.gnp ) FROM country WHERE country.continent = 'Asia,'"
     },
     {
         "exact": true,
@@ -3589,11 +3589,11 @@
                 "rec": 1
             },
             "keywords": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "order": {
                 "acc": 1,
@@ -3603,35 +3603,35 @@
                 "rec": 1
             },
             "select": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "select(no AGG)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "where": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             },
             "where(no OP)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 0,
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT country.name FROM country WHERE country.population<(SELECT MIN( country.population ) FROM country WHERE country.continent = 'Asia')"
+        "predictSQL": "country , country"
     },
     {
         "exact": 0,
@@ -4266,8 +4266,8 @@
         "predictSQL": "SELECT countrylanguage.countrycode FROM countrylanguage WHERE countrylanguage.language = 'Spanish' ORDER BY countrylanguage.percentage DESC LIMIT 1"
     },
     {
-        "exact": 0,
-        "exec": false,
+        "exact": true,
+        "exec": true,
         "goldSQL": "SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode",
         "hardness": "medium",
         "partial": {
@@ -4286,46 +4286,46 @@
                 "rec": 1
             },
             "group": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
-                "pred_total": 0,
-                "rec": 0
+                "pred_total": 1,
+                "rec": 1
             },
             "group(no Having)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
-                "pred_total": 0,
-                "rec": 0
+                "pred_total": 1,
+                "rec": 1
             },
             "keywords": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
-                "pred_total": 3,
-                "rec": 0
+                "pred_total": 1,
+                "rec": 1
             },
             "order": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 0,
-                "pred_total": 1,
-                "rec": 0
+                "pred_total": 0,
+                "rec": 1
             },
             "select": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 3,
-                "pred_total": 1,
-                "rec": 0
+                "pred_total": 3,
+                "rec": 1
             },
             "select(no AGG)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 3,
-                "pred_total": 1,
-                "rec": 0
+                "pred_total": 3,
+                "rec": 1
             },
             "where": {
                 "acc": 1,
@@ -4342,7 +4342,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT countrylanguage.language FROM countrylanguage ORDER BY countrylanguage.percentage DESC LIMIT 1"
+        "predictSQL": "SELECT countrylanguage.language , countrylanguage.countrycode , MAX( countrylanguage.percentage ) FROM countrylanguage GROUP BY countrylanguage.countrycode"
     },
     {
         "exact": true,
@@ -5069,11 +5069,11 @@
                 "rec": 0
             },
             "and/or": {
-                "acc": 0,
-                "f1": 0,
-                "label_total": 0,
+                "acc": 1,
+                "f1": 1,
+                "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "group": {
                 "acc": 1,
@@ -5121,18 +5121,18 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 2,
                 "rec": 0
             },
             "where(no OP)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 2,
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT city.name FROM city WHERE country.continent = 'Europe' EXCEPT SELECT city.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' AND countrylanguage.isofficial = 't'"
+        "predictSQL": "SELECT city.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.continent = 'Europe' AND countrylanguage.isofficial = 't' EXCEPT SELECT city.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' AND countrylanguage.isofficial = 't'"
     },
     {
         "exact": true,
@@ -5290,7 +5290,7 @@
                 "rec": 0
             }
         },
-        "predictSQL": "SELECT country.code FROM country WHERE countrylanguage.language = 'English' EXCEPT SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Republic' AND countrylanguage.isofficial = 't'"
+        "predictSQL": "SELECT country.code FROM country WHERE countrylanguage.language = 'English' EXCEPT SELECT country.code FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 't' AND country.governmentform = 'Republics'"
     },
     {
         "exact": 0,
@@ -5852,11 +5852,11 @@
         "hardness": "extra",
         "partial": {
             "IUEN": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 0,
-                "pred_total": 1,
-                "rec": 0
+                "pred_total": 0,
+                "rec": 1
             },
             "and/or": {
                 "acc": 1,
@@ -5866,18 +5866,18 @@
                 "rec": 1
             },
             "group": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 0,
-                "pred_total": 0,
-                "rec": 1
+                "pred_total": 1,
+                "rec": 0
             },
             "group(no Having)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 0,
-                "pred_total": 0,
-                "rec": 1
+                "pred_total": 1,
+                "rec": 0
             },
             "keywords": {
                 "acc": 0,
@@ -5922,7 +5922,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT countrylanguage.language FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Aruba' INTERSECT SELECT countrylanguage.language FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Aruba'"
+        "predictSQL": "SELECT countrylanguage.language FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Aruba' GROUP BY countrylanguage.language"
     },
     {
         "exact": true,
@@ -6199,15 +6199,15 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 4,
+                "pred_total": 1,
                 "rec": 0
             },
             "order": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 0,
-                "pred_total": 1,
-                "rec": 0
+                "pred_total": 0,
+                "rec": 1
             },
             "select": {
                 "acc": 0,
@@ -6238,7 +6238,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( * ) FROM countrylanguage WHERE countrylanguage.language = 'Spanish' ORDER BY countrylanguage.percentage DESC LIMIT 1"
+        "predictSQL": "SELECT COUNT( DISTINCT country.continent ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Spanish'"
     },
     {
         "exact": true,
@@ -6633,7 +6633,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( city.population ) FROM city WHERE city.district = 'Gelderland'"
+        "predictSQL": "SELECT AVG( city.population ) FROM city WHERE city.district = 'Gelderland'"
     },
     {
         "exact": 0,
@@ -6715,7 +6715,7 @@
         "predictSQL": "SELECT countrylanguage.countrycode FROM countrylanguage EXCEPT SELECT countrylanguage.countrycode FROM countrylanguage WHERE countrylanguage.language = 'English'"
     },
     {
-        "exact": true,
+        "exact": 0,
         "exec": true,
         "goldSQL": "SELECT T1.Continent FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Continent ORDER BY COUNT(*) DESC LIMIT 1",
         "hardness": "extra",
@@ -6756,11 +6756,11 @@
                 "rec": 1
             },
             "order": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 1
+                "rec": 0
             },
             "select": {
                 "acc": 1,
@@ -6791,7 +6791,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT country.continent FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode GROUP BY country.continent ORDER BY COUNT( * ) DESC LIMIT 1"
+        "predictSQL": "SELECT country.continent FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode GROUP BY country.continent ORDER BY COUNT( countrylanguage.language ) DESC LIMIT 1"
     },
     {
         "exact": true,
@@ -7446,25 +7446,25 @@
                 "rec": 1
             },
             "group": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
-                "pred_total": 0,
-                "rec": 0
+                "pred_total": 1,
+                "rec": 1
             },
             "group(no Having)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
-                "pred_total": 0,
-                "rec": 0
+                "pred_total": 1,
+                "rec": 1
             },
             "keywords": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 2,
-                "pred_total": 1,
-                "rec": 0
+                "pred_total": 2,
+                "rec": 1
             },
             "order": {
                 "acc": 1,
@@ -7477,14 +7477,14 @@
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 2,
                 "rec": 0
             },
             "select(no AGG)": {
                 "acc": 0,
                 "f1": 0,
                 "label_total": 2,
-                "pred_total": 1,
+                "pred_total": 2,
                 "rec": 0
             },
             "where": {
@@ -7502,7 +7502,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( * ) FROM countrylanguage WHERE countrylanguage.language = 'Spanish'"
+        "predictSQL": "SELECT COUNT( * ) , countrylanguage.countrycode FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Spanish' GROUP BY countrylanguage.countrycode"
     },
     {
         "exact": true,
@@ -8295,7 +8295,7 @@
         "predictSQL": "SELECT country.name FROM country ORDER BY country.population ASC LIMIT 3"
     },
     {
-        "exact": 0,
+        "exact": true,
         "exec": false,
         "goldSQL": "SELECT COUNT(*) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  \"Afghanistan\" AND IsOfficial  =  \"T\"",
         "hardness": "medium",
@@ -8343,18 +8343,18 @@
                 "rec": 1
             },
             "select": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "select(no AGG)": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "where": {
                 "acc": 1,
@@ -8371,7 +8371,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( countrylanguage.language ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Afghanistan' AND countrylanguage.isofficial = 't'"
+        "predictSQL": "SELECT COUNT( * ) FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE country.name = 'Afghanistan' AND countrylanguage.isofficial = 't'"
     },
     {
         "exact": true,
@@ -8453,8 +8453,8 @@
         "predictSQL": "SELECT AVG( country.lifeexpectancy ) FROM country WHERE country.region = 'Central Africa'"
     },
     {
-        "exact": 0,
-        "exec": false,
+        "exact": true,
+        "exec": true,
         "goldSQL": "SELECT sum(Population) FROM country WHERE Name NOT IN (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\")",
         "hardness": "extra",
         "partial": {
@@ -8501,11 +8501,11 @@
                 "rec": 1
             },
             "select": {
-                "acc": 0,
-                "f1": 0,
+                "acc": 1,
+                "f1": 1,
                 "label_total": 1,
                 "pred_total": 1,
-                "rec": 0
+                "rec": 1
             },
             "select(no AGG)": {
                 "acc": 1,
@@ -8529,7 +8529,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( DISTINCT country.population ) FROM country WHERE country.name NOT IN (SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English')"
+        "predictSQL": "SELECT SUM( country.population ) FROM country WHERE country.name NOT IN (SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English')"
     },
     {
         "exact": true,
@@ -8769,7 +8769,7 @@
         "predictSQL": "SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English' INTERSECT SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'French'"
     },
     {
-        "exact": true,
+        "exact": 0,
         "exec": false,
         "goldSQL": "SELECT Name ,  Population ,  LifeExpectancy FROM country WHERE Continent  =  \"Asia\" ORDER BY SurfaceArea DESC LIMIT 1",
         "hardness": "hard",
@@ -8803,18 +8803,18 @@
                 "rec": 1
             },
             "keywords": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 4,
-                "pred_total": 4,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "order": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "select": {
                 "acc": 1,
@@ -8831,21 +8831,21 @@
                 "rec": 1
             },
             "where": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             },
             "where(no OP)": {
-                "acc": 1,
-                "f1": 1,
+                "acc": 0,
+                "f1": 0,
                 "label_total": 1,
-                "pred_total": 1,
-                "rec": 1
+                "pred_total": 0,
+                "rec": 0
             }
         },
-        "predictSQL": "SELECT country.name , country.population , country.lifeexpectancy FROM country WHERE country.continent = 'Asian' ORDER BY country.surfacearea DESC LIMIT 1"
+        "predictSQL": "SELECT country.name , country.population , country.lifeexpectancy FROM country"
     },
     {
         "exact": true,
@@ -9086,7 +9086,7 @@
     },
     {
         "exact": true,
-        "exec": true,
+        "exec": false,
         "goldSQL": "SELECT DISTINCT T1.Region FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  \"English\" OR T2.Language  =  \"Dutch\"",
         "hardness": "hard",
         "partial": {
@@ -9161,7 +9161,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT DISTINCT country.region FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Dutch' OR countrylanguage.language = 'English'"
+        "predictSQL": "SELECT country.region FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'Dutch' OR countrylanguage.language = 'English'"
     },
     {
         "exact": 0,
@@ -9319,7 +9319,7 @@
                 "rec": 1
             }
         },
-        "predictSQL": "SELECT COUNT( DISTINCT country.name ) FROM country WHERE country.name NOT IN (SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English')"
+        "predictSQL": "SELECT COUNT( * ) FROM country WHERE country.name NOT IN (SELECT country.name FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode WHERE countrylanguage.language = 'English')"
     },
     {
         "exact": true,

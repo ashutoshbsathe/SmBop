@@ -14,7 +14,7 @@ assert len(our) == len(orig)
 
 for i in range(len(our)):
     assert our[i]['hardness'] == orig[i]['hardness']
-    if our[i]['exec'] == False and orig[i]['exec'] == True:
+    if our[i]['exact'] == False and orig[i]['exact'] == True:
         print('index = ', i)
         print('hardness = ', our[i]['hardness'])
         print('predicted SQL by finedtuned model = ', our[i]['predictSQL'])
