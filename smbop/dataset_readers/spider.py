@@ -240,14 +240,17 @@ class SmbopSpiderDatasetReader(DatasetReader):
                 # there are two examples in the train set that are wrongly formatted, skip them
                 print(f"error with {ex['query']}")
                 return None
-
-        ins = self.text_to_instance(
-            utterance=ex["question"],
-            db_id=ex["db_id"],
-            sql=sql,
-            sql_with_values=sql_with_values,
-        )
-        return ins
+        try:
+            ins = self.text_to_instance(
+                utterance=ex["question"],
+                db_id=ex["db_id"],
+                sql=sql,
+                sql_with_values=sql_with_values,
+            )
+            return ins
+        except Exception as e:
+            print(f"error with {ex['query']}")
+            return None
 
 
     def text_to_instance(

@@ -185,6 +185,7 @@ def codegen_agg(ast_dict):
                 codegen_agg(val1).parent = sec_agg_node
                 codegen_agg(val2).parent = sec_agg_node
             else:
+                print(sec_agg_type)
                 raise Exception
         else:
             node.val = ast_dict[agg_type]
