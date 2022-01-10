@@ -837,12 +837,11 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     try:
         cursor.execute(p_str)
         p_res = cursor.fetchall()
+        # PCFG SQLs may give error hence g_str is also under try block now
+        cursor.execute(g_str)
+        q_res = cursor.fetchall()
     except:
         return False
-
-    cursor.execute(g_str)
-    q_res = cursor.fetchall()
-
 
     def res_map(res, val_units):
         rmap = {}
