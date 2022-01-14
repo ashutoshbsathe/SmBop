@@ -574,6 +574,8 @@ def isValidSQL(sql, db):
 
 
 def print_scores(scores, etype):
+    save = {}
+
     levels = ["easy", "medium", "hard", "extra", "all"]
     partial_types = [
         "select",
@@ -600,6 +602,8 @@ def print_scores(scores, etype):
                 "execution", *this_scores
             )
         )
+        save['exec'] = {level: scores[level]['exec'] for level in levels}
+
 
     if etype in ["all", "match"]:
         print("\n====================== EXACT MATCHING ACCURACY =====================")
@@ -609,6 +613,8 @@ def print_scores(scores, etype):
                 "exact match", *exact_scores
             )
         )
+        save['exact'] = [scores[level]['exact'] for level in levels]
+
         print("\n---------------------PARTIAL MATCHING ACCURACY----------------------")
         for type_ in partial_types:
             this_scores = [scores[level]["partial"][type_]["acc"] for level in levels]
@@ -635,6 +641,9 @@ def print_scores(scores, etype):
                     type_, *this_scores
                 )
             )
+
+    with open('results.json', 'w') as f:
+        json.dump(save, f, indent=4, sort_keys=True)
 
 
 def evaluate(gold, predict, db_dir, etype, kmaps):
