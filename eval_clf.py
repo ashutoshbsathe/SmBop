@@ -6,10 +6,11 @@ from allennlp.data.vocabulary import Vocabulary
 from smbop.modules.relation_transformer import *
 import json
 from allennlp.common import Params
-from smbop.models.smbop import SmbopParser
+from smbop.models.smbop_clf import SmbopParser
 from smbop.modules.lxmert import LxmertCrossAttentionLayer
 from smbop.dataset_readers.spider import SmbopSpiderDatasetReader
 from smbop.dataset_readers.pickle_reader import PickleReader
+import smbop.dataset_readers.disamb_sql as disamb_sql
 import itertools
 import smbop.utils.node_util as node_util
 import numpy as np
@@ -48,17 +49,24 @@ def main():
     predictor = Predictor.from_path(
         args.archive_path, cuda_device=args.gpu, overrides=overrides
     )
+    predictor._model.training = True
     print("after pred")
 
     with open(args.output, "w") as g:
-        with open(args.dev_path, 'rb') as f:
-            dev_pkl = pickle.load(f)
-            for i, instance in enumerate(tqdm.tqdm(dev_pkl)):
-                """
-                instance = predictor._dataset_reader.text_to_instance(
-                    utterance=el["question"], db_id=el["db_id"]
+        with open(args.dev_path) as f:
+            dev_json = json.load(f)
+            for i, el in enumerate(tqdm.tqdm(dev_json)):
+                ex = disamb_sql.fix_number_value(el)
+                sql = disamb_sql.disambiguate_items(
+                    ex['db_id'],
+                    ex['query_toks_no_value'],
+                    predictor._dataset_reader._tables_file,
+                    allow_aliases=False,
                 )
-                """
+                sql_with_values = disamb_sql.sanitize(ex['query'])
+                instance = predictor._dataset_reader.text_to_instance(
+                    utterance=el["question"], db_id=el["db_id"], sql=sql, sql_with_values=sql_with_values
+                )
                 # There is a bug that if we run with batch_size=1, the predictions are different.
                 if i == 0:
                     instance_0 = instance
@@ -68,12 +76,15 @@ def main():
                         out = predictor._model.forward_on_instances(
                             [instance, instance_0]
                         )
+                        print(out[0].keys())
                         print(out[0]['beam_scores'].size(), out[0]['beam_scores'].sum())
                         pred = out[0]["sql_list"]
 
                 else:
                     pred = "NO PREDICTION"
                 g.write(f"{pred}\t{instance['db_id'].metadata}\n")
+                if i == 50:
+                    exit(0)
 
 
 if __name__ == "__main__":
