@@ -156,6 +156,10 @@ def fix_number_value(ex: JsonDict):
             != ex["query_toks_no_value"][i_no_val + 1].lower()
         ):
             i_val_end += 1
+            # This should be fixed from SmBop's side ?
+            if i_val_end + 1 >= len(ex['query_toks']):
+                print('Applying fix')
+                break 
 
         if (
             i_val == i_val_end

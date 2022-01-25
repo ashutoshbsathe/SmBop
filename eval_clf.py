@@ -51,19 +51,29 @@ def main():
     )
     predictor._model.training = True
     print("after pred")
-
+    
+    outputs = []
     with open(args.output, "w") as g:
         with open(args.dev_path) as f:
             dev_json = json.load(f)
             for i, el in enumerate(tqdm.tqdm(dev_json)):
-                ex = disamb_sql.fix_number_value(el)
-                sql = disamb_sql.disambiguate_items(
-                    ex['db_id'],
-                    ex['query_toks_no_value'],
-                    predictor._dataset_reader._tables_file,
-                    allow_aliases=False,
-                )
-                sql_with_values = disamb_sql.sanitize(ex['query'])
+                if 'query_toks' in el:
+                    try:
+                        ex = disamb_sql.fix_number_value(el)
+                        sql = disamb_sql.disambiguate_items(
+                            ex['db_id'],
+                            ex['query_toks_no_value'],
+                            predictor._dataset_reader._tables_file,
+                            allow_aliases=False,
+                        )
+                        sql_with_values = disamb_sql.sanitize(ex['query'])
+                    except Exception as e:
+                        print(f'Error with {el["query"]}')
+                        outputs.append(None)
+                        continue
+                else:
+                    sql = None
+                    sql_with_values = None
                 instance = predictor._dataset_reader.text_to_instance(
                     utterance=el["question"], db_id=el["db_id"], sql=sql, sql_with_values=sql_with_values
                 )
@@ -77,15 +87,22 @@ def main():
                             [instance, instance_0]
                         )
                         print(out[0].keys())
-                        print(out[0]['beam_scores'].size(), out[0]['beam_scores'].sum())
-                        pred = out[0]["sql_list"]
+                        #print(out[0]['beam_scores'].size(), out[0]['beam_scores'].sum())
+                        #pred = out[0]["sql_list"]
+                        pred = 'Dummy prediction'
 
                 else:
                     pred = "NO PREDICTION"
-                g.write(f"{pred}\t{instance['db_id'].metadata}\n")
-                if i == 50:
-                    exit(0)
-
+                if instance is not None:
+                    g.write(f"{pred}\t{instance['db_id'].metadata}\n")
+                else:
+                    g.write(f"{pred}\t{el['db_id']}\n")
+                outputs.append(out[0])
+                #if i == 50:
+                #    exit(0)
+    with open('outputs.pickle', 'wb') as f:
+        pickle.dump(outputs, f)
+    assert len(outputs) == len(dev_json)
 
 if __name__ == "__main__":
     main()
