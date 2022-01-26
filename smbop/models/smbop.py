@@ -471,7 +471,6 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 value=-1,
             )
             if self.training:
-                print('Teacher forcing')
                 is_gold_span = torch.nn.functional.pad(
                     is_gold_span,
                     pad=(0, delta, 0, delta),

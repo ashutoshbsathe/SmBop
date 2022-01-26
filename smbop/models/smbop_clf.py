@@ -470,8 +470,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 mode="constant",
                 value=-1,
             )
-            if self.training:
-                print('Enabling teacher forcing')
+            if True:
                 is_gold_span = torch.nn.functional.pad(
                     is_gold_span,
                     pad=(0, delta, 0, delta),
@@ -535,7 +534,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 value=0,
             )
 
-        if self.training:
+        if True:
             final_leaf_schema_scores = leaf_schema_scores.clone()
             if not self.is_oracle:
                 avg_leaf_schema_scores = allennlp.nn.util.masked_log_softmax(
@@ -553,6 +552,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 is_gold_leaf.bool().unsqueeze(-1),
                 allennlp.nn.util.max_value_of_dtype(final_leaf_schema_scores.dtype),
             )
+            print(final_leaf_schema_scores.size())
         else:
             final_leaf_schema_scores = leaf_schema_scores
 
@@ -675,10 +675,10 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 beam_types, frontier_op_ids, l_beam_idx, r_beam_idx
             )
             frontier_mask = frontier_mask * valid_op_mask
-
+            print(frontier_mask.size())
             unique_frontier_scores = frontier_scores
 
-            if self.training:
+            if True:
                 with torch.no_grad():
                     is_levelorder_list = vec_utils.isin(
                         new_hash_gold_levelorder[decoding_step + 1], frontier_hash
@@ -699,6 +699,8 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
             beam_scores, beam_mask, beam_idx = allennlp.nn.util.masked_topk(
                 unique_frontier_scores, mask=frontier_mask.bool(), k=self._beam_size
             )
+            print(beam_scores.size(), beam_idx)
+            print(beam_scores[0])
             old_beam_types = beam_types.clone()
 
             beam_types = torch.gather(frontier_op_ids, -1, beam_idx)
@@ -741,7 +743,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 ]
             )
 
-        if not self.training:
+        if not True:
             (
                 beam_hash_list,
                 beam_mask_list,
@@ -763,7 +765,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 allennlp.nn.util.min_value_of_dtype(beam_scores_tensor.dtype),
             )
 
-        if self.training:
+        if True:
             pre_loss = (vector_loss / tree_sizes_vector).mean()
 
             loss = pre_loss.squeeze()
@@ -774,6 +776,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 hash_gold_tree,
                 beam_hash,
             )
+            outputs['beam_scores'] = beam_scores
             return outputs
         else:
             end = time.time()
@@ -847,7 +850,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
                 self._final_beam_acc(int(acc))
                 final_beam_acc_list.append(bool(acc))
 
-        if not self.training:
+        if not True:
 
             if (
                 kwargs["is_gold_leaf"] is not None
@@ -1113,7 +1116,7 @@ a boolean vector to tell if a given span is a gold span (i.e it corrosponds to a
         out = {
             "final_beam_acc": self._final_beam_acc.get_metric(reset),
         }
-        if not self.training:
+        if not True:
             out["spider"] = self._spider_acc.get_metric(reset)
             out["reranker"] = self._reranker_acc.get_metric(reset)
             out["leafs_acc"] = self._leafs_acc.get_metric(reset)

@@ -49,7 +49,6 @@ def main():
     predictor = Predictor.from_path(
         args.archive_path, cuda_device=args.gpu, overrides=overrides
     )
-    predictor._model.training = True
     print("after pred")
     
     outputs = []
