@@ -685,6 +685,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
             }
 
     eval_err_num = 0
+    db_stats = {}
     for i, (p, g) in enumerate(zip(plist, glist)):
         print(i, p, g)
         p_str = p[0]
@@ -692,6 +693,7 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
         db = g[-1]
         g_str = ' '.join(g[:-1])
         db_name = db
+        db_stats.setdefault(db_name, {'easy': 0, 'medium': 0, 'hard': 0, 'extra': 0, 'all': 0})
         db = os.path.join(db_dir, db, db + ".sqlite")
         schema = Schema(get_schema(db))
         try:
@@ -700,6 +702,8 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
             entries.append({})
             continue
         hardness = evaluator.eval_hardness(g_sql)
+        db_stats[db_name][hardness] += 1
+        db_stats[db_name]['all'] += 1
         scores[hardness]["count"] += 1
         scores["all"]["count"] += 1
 
@@ -835,6 +839,8 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
 
     print_scores(scores, etype)
 
+    for db_name, stats in db_stats.items():
+        print(f'{db_name}, {stats["easy"]}, {stats["medium"]}, {stats["hard"]}, {stats["extra"]}, {stats["all"]}')
 
 def eval_exec_match(db, p_str, g_str, pred, gold):
     """
